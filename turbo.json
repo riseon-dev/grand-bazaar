@@ -1,0 +1,29 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+        "topo": {
+      "dependsOn": ["^topo"]
+    },
+    "build": {
+      "outputs": ["dist/**"],
+      "dependsOn": ["^build", "topo"]
+    },
+    "start": {
+      "dependsOn": ["build"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "compile": {
+      "dependsOn": ["^compile","build", "topo"]
+    },
+    "deploy": {
+      "dependsOn": ["compile"]
+    },
+    "format": {},
+    "lint": {},
+    "test": {},
+    "test:cov": {}
+  }
+}

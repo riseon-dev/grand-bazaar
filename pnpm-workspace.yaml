@@ -2,3 +2,4 @@ packages:
   - 'contracts/**'
   - 'libraries/**'
   - 'services/**'
+  - 'docs/**'
