@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "node-up": "hardhat node",
     "compile": "hardhat compile",
-    "test": "hardhat test" 
+    "test": "hardhat test" ,
+    "test:gas": "REPORT_GAS=true hardhat test",
+    "deploy": "hardhat ignition deploy ./ignition/modules/Lock.ts"
   },
   "keywords": [],
   "author": "",
