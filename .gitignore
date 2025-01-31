@@ -193,3 +193,12 @@ file_descriptor_set.bin
 
 # include test fixtures for vt100
 !crates/turborepo-vt100/tests/data
+
+## Hardhat
+cache
+artifacts
+typechain
+typechain-types
+coverage
+coverage.json
+ignition/deployments/chain-31337
