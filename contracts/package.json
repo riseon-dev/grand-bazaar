@@ -4,17 +4,26 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "node-up": "hardhat node",
+    "chain": "hardhat node",
     "compile": "hardhat compile",
-    "test": "hardhat test" ,
+    "clean": "hardhat clean",
+    "test": "hardhat test",
     "test:gas": "REPORT_GAS=true hardhat test",
+    "test:cov": "SOLIDITY_COVERAGE=true npx hardhat coverage",
     "deploy": "hardhat ignition deploy ./ignition/modules/Lock.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "2.0.8",
     "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
-    "hardhat": "2.22.18"
+    "@nomicfoundation/hardhat-viem": "2.0.6",
+    "@types/chai": "5.0.1",
+    "@types/chai-as-promised": "8.0.1",
+    "chai": "4.5.0",
+    "hardhat": "2.22.18",
+    "mocha": "11.1.0",
+    "viem": "2.22.17"
   }
 }
