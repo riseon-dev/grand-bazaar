@@ -37,6 +37,10 @@ abstract contract AbstractMultiWalletAccount {
 
     function withdraw() external {}
 
+    function checkBalance() public view returns (uint256) {
+        return 0;
+    }
+
     modifier onlyOperator() {
         require(msg.sender == operator, "Only operator can call this function");
         _;

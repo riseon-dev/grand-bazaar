@@ -41,6 +41,18 @@ importers:
       '@account-abstraction/contracts':
         specifier: 0.7.0
         version: 0.7.0
+      '@nomicfoundation/hardhat-toolbox-viem':
+        specifier: 3.0.0
+        version: 3.0.0(sgjnfusodsoe2f7czehve2k2ue)
+      '@nomicfoundation/hardhat-viem':
+        specifier: 2.0.6
+        version: 2.0.6(hardhat@2.22.18(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3))(typescript@5.7.3))(typescript@5.7.3)(viem@2.22.17(typescript@5.7.3))
+      '@openzeppelin/contracts':
+        specifier: 5.2.0
+        version: 5.2.0
+      viem:
+        specifier: 2.22.17
+        version: 2.22.17(typescript@5.7.3)
     devDependencies:
       '@nomicfoundation/hardhat-chai-matchers':
         specifier: 2.0.8
@@ -48,12 +60,6 @@ importers:
       '@nomicfoundation/hardhat-ignition':
         specifier: 0.15.9
         version: 0.15.9(@nomicfoundation/hardhat-verify@2.0.12(hardhat@2.22.18(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3))(typescript@5.7.3)))(hardhat@2.22.18(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3))(typescript@5.7.3))
-      '@nomicfoundation/hardhat-toolbox-viem':
-        specifier: ^3.0.0
-        version: 3.0.0(sgjnfusodsoe2f7czehve2k2ue)
-      '@nomicfoundation/hardhat-viem':
-        specifier: 2.0.6
-        version: 2.0.6(hardhat@2.22.18(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3))(typescript@5.7.3))(typescript@5.7.3)(viem@2.22.17(typescript@5.7.3))
       '@types/chai':
         specifier: 5.0.1
         version: 5.0.1
@@ -69,9 +75,6 @@ importers:
       mocha:
         specifier: 11.1.0
         version: 11.1.0
-      viem:
-        specifier: 2.22.17
-        version: 2.22.17(typescript@5.7.3)
 
 packages:
 
