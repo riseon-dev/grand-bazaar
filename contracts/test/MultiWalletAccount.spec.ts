@@ -4,7 +4,7 @@ import {
 } from "@nomicfoundation/hardhat-toolbox-viem/network-helpers";
 import { expect } from "chai";
 import hre from "hardhat";
-import { parseGwei } from "viem";
+import {getAddress, parseGwei} from "viem";
 //import {
 //   createPublicClient,
 //   createWalletClient,
@@ -33,12 +33,12 @@ async function deployContracts () {
     return stableCoin;
   }
 
-  const deployMultiWallet = async (address: string) => {
+  const deployMultiWallet = async (stableCoinAddress: string) => {
     // eslint-disable-next-line
     // @ts-ignore
     const multiWallet = await hre.viem.deployContract("MultiWalletAccount", [
-      deployer.account.address,
-      address,
+      operator.account.address,
+      stableCoinAddress,
     ], {});
     return multiWallet;
   }
@@ -62,14 +62,23 @@ async function deployContracts () {
 describe('MultiWalletAccount', function () {
   describe('Deployment', () => {
     it('should require one operator and a base token to deploy', async () => {
-
       const { stableCoin, multiWallet } = await loadFixture(deployContracts);
 
       // eslint-disable-next-line
       expect(stableCoin).to.be.ok;
       // eslint-disable-next-line
       expect(multiWallet).to.be.ok;
-    })
+    });
+
+    it('should have the correct operator', async () => {
+      const { operator, multiWallet } = await loadFixture(deployContracts);
+
+      // eslint-disable-next-line
+      // @ts-ignore
+      expect(await multiWallet.read.operator()).to.equal(
+        getAddress(operator.account.address)
+      );
+    });
   });
 
 
