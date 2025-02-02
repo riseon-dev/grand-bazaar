@@ -7,7 +7,7 @@ import {PackedUserOperation} from "@account-abstraction/contracts/interfaces/IAc
 
 
 contract MultiWalletAccount is AbstractMultiWalletAccount, IAccount {
-    constructor(address _operator) AbstractMultiWalletAccount(_operator) {}
+    constructor(address _operator, address _baseToken) AbstractMultiWalletAccount(_operator, _baseToken) {}
 
     function validateUserOp(
         PackedUserOperation calldata userOp,

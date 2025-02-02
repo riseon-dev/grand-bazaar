@@ -16,9 +16,15 @@ abstract contract AbstractMultiWalletAccount {
       * Operator can swap tokens to other tokens if permission is given by user.
     */
     address public operator;
+    /*
+      * The base token of the account (the token in which the account is denominated)
+      * All funds in the account are in base token.
+    */
+    address public baseToken;
 
-    constructor(address _operator) {
+    constructor(address _operator, address _baseToken) {
         operator = _operator;
+        baseToken = _baseToken;
     }
 
     function deposit() external {
