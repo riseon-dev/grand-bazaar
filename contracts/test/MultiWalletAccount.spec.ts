@@ -70,14 +70,18 @@ describe('MultiWalletAccount', function () {
       expect(multiWallet).to.be.ok;
     });
 
-    it('should have the correct operator', async () => {
-      const { operator, multiWallet } = await loadFixture(deployContracts);
+    it('should have the correct operator && stable coin address', async () => {
+      const { operator, multiWallet, stableCoin } = await loadFixture(deployContracts);
 
       // eslint-disable-next-line
       // @ts-ignore
       expect(await multiWallet.read.operator()).to.equal(
         getAddress(operator.account.address)
       );
+
+      // eslint-disable-next-line
+      // @ts-ignore
+      expect(await multiWallet.read.baseToken()).to.equal(getAddress(stableCoin.address));
     });
   });
 
