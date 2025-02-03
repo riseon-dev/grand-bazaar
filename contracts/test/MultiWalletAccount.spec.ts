@@ -1,7 +1,7 @@
 import {loadFixture} from '@nomicfoundation/hardhat-toolbox-viem/network-helpers';
 import {expect} from 'chai';
 import hre from 'hardhat';
-import {getAddress, getContract, parseEther, parseGwei} from 'viem';
+import {getAddress, getContract, parseEther} from 'viem';
 import {getBalance} from 'viem/actions';
 
 async function deployContracts() {
@@ -14,7 +14,7 @@ async function deployContracts() {
       // eslint-disable-next-line
       // @ts-ignore
       'StableCoin',
-      [parseGwei('1000000'), operatorAddress],
+      [parseEther('1000000'), operatorAddress],
       {},
     );
 
@@ -34,6 +34,19 @@ async function deployContracts() {
 
   const stableCoin = await deployStableCoin(operator.account.address);
   const multiWallet = await deployMultiWallet(stableCoin.address);
+
+  // send some stable coins to user1
+  const stableCoinContract = getContract({
+    address: stableCoin.address,
+    abi: stableCoin.abi,
+    client: operator,
+  });
+  // eslint-disable-next-line
+  // @ts-ignore
+  await stableCoinContract.write.transfer([
+    user1.account.address,
+    parseEther('20'),
+  ]);
 
   return {
     deployer,
@@ -125,7 +138,7 @@ describe('MultiWalletAccount', function () {
       expect(balanceAfter).to.equal(ethAmount);
 
       // withdraw 1 eth
-      const contract = getContract({
+      const multiWalletContract = getContract({
         address: multiWallet.address,
         abi: multiWallet.abi,
         client: operator,
@@ -133,8 +146,8 @@ describe('MultiWalletAccount', function () {
 
       // eslint-disable-next-line
       // @ts-ignore
-      await expect(contract.write.withdrawEthBalance(ethAmount)).to.be
-        .fulfilled;
+      await expect(multiWalletContract.write.withdrawEthBalance(ethAmount)).to
+        .be.fulfilled;
       const balanceAfterWithdraw = await getBalance(publicClient, {
         address: multiWallet.address,
       });
@@ -165,7 +178,7 @@ describe('MultiWalletAccount', function () {
       expect(balanceAfter).to.equal(ethAmount);
 
       // withdraw 1 eth
-      const contract = getContract({
+      const multiWalletContract = getContract({
         address: multiWallet.address,
         abi: multiWallet.abi,
         client: user1,
@@ -174,7 +187,7 @@ describe('MultiWalletAccount', function () {
       await expect(
         // eslint-disable-next-line
         // @ts-ignore
-        contract.write.withdrawEthBalance(ethAmount),
+        multiWalletContract.write.withdrawEthBalance(ethAmount),
       ).to.be.rejectedWith('Only operator can call this function');
       const balanceAfterWithdraw = await getBalance(publicClient, {
         address: multiWallet.address,
@@ -183,10 +196,52 @@ describe('MultiWalletAccount', function () {
     });
   });
 
-  describe('User functions', function () {
+  describe.only('User functions', function () {
     // deposit base token
-    it('should allow user to deposit base token', async () => {});
-    // check balance of base token
+    it('should allow user to deposit base token', async () => {
+      const {multiWallet, stableCoin, user1} =
+        await loadFixture(deployContracts);
+
+      const multiWalletContract = getContract({
+        address: multiWallet.address,
+        abi: multiWallet.abi,
+        client: user1,
+      });
+
+      const stableCoinContract = getContract({
+        address: stableCoin.address,
+        abi: stableCoin.abi,
+        client: user1,
+      });
+      // eslint-disable-next-line
+      // @ts-ignore
+      await expect(
+        stableCoinContract.write.approve([
+          multiWallet.address,
+          parseEther('5'),
+        ]),
+      ).to.be.fulfilled;
+      // eslint-disable-next-line
+      // @ts-ignore
+      await expect(multiWalletContract.write.deposit([parseEther('5')])).to.be
+        .fulfilled;
+
+      // check balance of base token
+      // eslint-disable-next-line
+      // @ts-ignore
+      const balance = await stableCoinContract.read.balanceOf([
+        multiWalletContract.address,
+      ]);
+      expect(balance).to.equal(parseEther('5'));
+
+      // eslint-disable-next-line
+      // @ts-ignore
+      const getStorageBalance = await multiWalletContract.read.checkBalance([
+        user1.account.address,
+        stableCoin.address,
+      ]);
+      expect(getStorageBalance).to.equal(parseEther('5'));
+    });
     // unlock base token
     // lock base token
     // withdraw base token
