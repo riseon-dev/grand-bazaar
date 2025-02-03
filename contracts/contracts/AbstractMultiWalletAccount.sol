@@ -52,11 +52,19 @@ abstract contract AbstractMultiWalletAccount {
         emit DepositEvent(msg.sender, baseToken,  amount);
     }
 
-    function lock() external {}
+    function withdraw(address tokenAddress) external {
+        address withdrawer = msg.sender;
+        uint256 balance = wallets[withdrawer][tokenAddress];
+        require(balance > 0, "Insufficient balance");
 
-    function unlock() external {}
+        IERC20 tokenContract = IERC20(tokenAddress);
 
-    function withdraw() external {}
+        // transfer
+        bool sent = tokenContract.transfer(withdrawer, balance);
+        require(sent, "Failed to withdraw funds");
+
+        wallets[withdrawer][tokenAddress] = 0;
+    }
 
     function checkBalance(address user, address tokenAddress) public view returns (uint256) {
         return wallets[user][tokenAddress];
