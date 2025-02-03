@@ -10,7 +10,8 @@
     "test": "hardhat test",
     "test:gas": "REPORT_GAS=true hardhat test",
     "test:cov": "SOLIDITY_COVERAGE=true npx hardhat coverage",
-    "deploy": "hardhat ignition deploy ./ignition/modules/Lock.ts"
+    "deploy": "hardhat ignition deploy ./ignition/modules/Lock.ts",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "keywords": [],
   "author": "",
