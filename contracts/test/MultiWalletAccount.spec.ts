@@ -1,7 +1,8 @@
 import { loadFixture } from "@nomicfoundation/hardhat-toolbox-viem/network-helpers"
 import { expect } from "chai"
 import hre from "hardhat"
-import { getAddress, parseGwei } from "viem"
+import { getAddress, getContract, parseEther, parseGwei } from "viem"
+import { getBalance } from "viem/actions"
 //import {
 //   createPublicClient,
 //   createWalletClient,
@@ -32,9 +33,9 @@ async function deployContracts() {
 	}
 
 	const deployMultiWallet = async (stableCoinAddress: string) => {
-		// eslint-disable-next-line
-		// @ts-ignore
 		const multiWallet = await hre.viem.deployContract(
+			// eslint-disable-next-line
+			// @ts-ignore
 			"MultiWalletAccount",
 			[operator.account.address, stableCoinAddress],
 			{}
@@ -81,7 +82,109 @@ describe("MultiWalletAccount", function () {
 		})
 	})
 
-	// describe('Only Operator functions', function () => {
-	//
-	// })
+	describe("Only Operator functions", function () {
+		it("should throw an error if person other than operator tries to deposit eth", async () => {
+			const { multiWallet, user1 } = await loadFixture(deployContracts)
+
+			const ethAmount = parseEther("1")
+
+			await expect(
+				user1.sendTransaction({
+					to: multiWallet.address,
+					value: ethAmount,
+				})
+			).to.be.rejectedWith("Only operator can call this function")
+		})
+
+		it("should allow operator to deposit eth", async () => {
+			const { multiWallet, operator } = await loadFixture(deployContracts)
+
+			const ethAmount = parseEther("1")
+
+			await expect(
+				operator.sendTransaction({
+					to: multiWallet.address,
+					value: ethAmount,
+				})
+			).to.be.fulfilled
+		})
+
+		it("should allow operator to withdraw eth", async () => {
+			const { multiWallet, operator, publicClient } = await loadFixture(deployContracts)
+
+			const ethAmount = parseEther("1")
+			// check balance
+			const balanceBefore = await getBalance(publicClient, {
+				address: multiWallet.address,
+			})
+			expect(balanceBefore).to.equal(0)
+
+			// send 1 eth
+			await operator.sendTransaction({
+				to: multiWallet.address,
+				value: ethAmount,
+			})
+
+			// check balance
+			const balanceAfter = await getBalance(publicClient, {
+				address: multiWallet.address,
+			})
+			expect(balanceAfter).to.equal(ethAmount)
+
+			// withdraw 1 eth
+			const contract = getContract({
+				address: multiWallet.address,
+				abi: multiWallet.abi,
+				client: operator,
+			})
+
+			// eslint-disable-next-line
+			// @ts-ignore
+			await expect(contract.write.withdrawEthBalance(ethAmount)).to.be.fulfilled
+			const balanceAfterWithdraw = await getBalance(publicClient, {
+				address: multiWallet.address,
+			})
+			expect(balanceAfterWithdraw).to.equal(0)
+		})
+
+		it("should throw an error if someone other than operator tries to withdraw eth", async () => {
+			const { multiWallet, operator, publicClient, user1 } =
+				await loadFixture(deployContracts)
+
+			const ethAmount = parseEther("1")
+			// check balance
+			const balanceBefore = await getBalance(publicClient, {
+				address: multiWallet.address,
+			})
+			expect(balanceBefore).to.equal(0)
+
+			// send 1 eth
+			await operator.sendTransaction({
+				to: multiWallet.address,
+				value: ethAmount,
+			})
+
+			// check balance
+			const balanceAfter = await getBalance(publicClient, {
+				address: multiWallet.address,
+			})
+			expect(balanceAfter).to.equal(ethAmount)
+
+			// withdraw 1 eth
+			const contract = getContract({
+				address: multiWallet.address,
+				abi: multiWallet.abi,
+				client: user1,
+			})
+			// eslint-disable-next-line
+			// @ts-ignore
+			await expect(contract.write.withdrawEthBalance(ethAmount)).to.be.rejectedWith(
+				"Only operator can call this function"
+			)
+			const balanceAfterWithdraw = await getBalance(publicClient, {
+				address: multiWallet.address,
+			})
+			expect(balanceAfterWithdraw).to.equal(parseEther("1"))
+		})
+	})
 })
