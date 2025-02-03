@@ -29,6 +29,7 @@ abstract contract AbstractMultiWalletAccount {
     mapping(address => mapping(address => uint256)) public wallets;
 
     event DepositEvent(address from, address tokenAddress, uint256 amountReceived);
+    event WithdrawEvent(address to, address tokenAddress, uint256 amountSent);
 
     constructor(address _operator, address _baseToken) {
         operator = _operator;
@@ -36,7 +37,7 @@ abstract contract AbstractMultiWalletAccount {
     }
 
     function deposit(uint256 amount) external {
-        address depositer = msg.sender;
+        address depositor = msg.sender;
 
         IERC20 baseTokenContract = IERC20(baseToken);
 
@@ -45,10 +46,10 @@ abstract contract AbstractMultiWalletAccount {
         require(allowance >= amount, "Allowance is not enough");
 
         // transfer
-        bool sent = baseTokenContract.transferFrom(depositer, address(this), amount);
+        bool sent = baseTokenContract.transferFrom(depositor, address(this), amount);
         require(sent, "Failed to deposit funds");
 
-        wallets[depositer][baseToken] += amount;
+        wallets[depositor][baseToken] += amount;
         emit DepositEvent(msg.sender, baseToken,  amount);
     }
 
@@ -64,6 +65,7 @@ abstract contract AbstractMultiWalletAccount {
         require(sent, "Failed to withdraw funds");
 
         wallets[withdrawer][tokenAddress] = 0;
+        emit WithdrawEvent(withdrawer, tokenAddress, balance);
     }
 
     function checkBalance(address user, address tokenAddress) public view returns (uint256) {
