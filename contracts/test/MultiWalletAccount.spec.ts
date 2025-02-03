@@ -196,7 +196,7 @@ describe('MultiWalletAccount', function () {
     });
   });
 
-  describe.only('User functions', function () {
+  describe('User functions', function () {
     // deposit base token
     it('should allow user to deposit base token', async () => {
       const {multiWallet, stableCoin, user1} =
