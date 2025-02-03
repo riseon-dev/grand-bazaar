@@ -22,10 +22,4 @@ export default [
   ...tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
   pluginJest.configs["flat/style"],
-  {
-    files: ["**/*.spec.ts", "**/*.spec.tsx"],
-    rules: {
-      "no-unused-expressions": "off"
-    }
-  }
 ];
