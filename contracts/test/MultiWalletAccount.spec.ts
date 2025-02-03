@@ -9,10 +9,12 @@ async function deployContracts() {
 
   const publicClient = await hre.viem.getPublicClient();
 
-  const deployStableCoin = async () => {
+  const deployStableCoin = async (operatorAddress: string) => {
     const stableCoin = await hre.viem.deployContract(
+      // eslint-disable-next-line
+      // @ts-ignore
       'StableCoin',
-      [parseGwei('1000000')],
+      [parseGwei('1000000'), operatorAddress],
       {},
     );
 
@@ -30,7 +32,7 @@ async function deployContracts() {
     return multiWallet;
   };
 
-  const stableCoin = await deployStableCoin();
+  const stableCoin = await deployStableCoin(operator.account.address);
   const multiWallet = await deployMultiWallet(stableCoin.address);
 
   return {
@@ -179,5 +181,14 @@ describe('MultiWalletAccount', function () {
       });
       expect(balanceAfterWithdraw).to.equal(parseEther('1'));
     });
+  });
+
+  describe('User functions', function () {
+    // deposit base token
+    it('should allow user to deposit base token', async () => {});
+    // check balance of base token
+    // unlock base token
+    // lock base token
+    // withdraw base token
   });
 });
