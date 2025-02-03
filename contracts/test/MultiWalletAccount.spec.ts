@@ -3,19 +3,6 @@ import {expect} from 'chai';
 import hre from 'hardhat';
 import {getAddress, getContract, parseEther, parseGwei} from 'viem';
 import {getBalance} from 'viem/actions';
-//import {
-//   createPublicClient,
-//   createWalletClient,
-//   formatEther,
-//   formatUnits,
-//   getContract,
-//   http,
-//   parseAbi,
-//   parseEther,
-//   parseUnits,
-//   getAddress,
-//   parseGwei
-// } from 'viem';
 
 async function deployContracts() {
   const [deployer, operator, user1] = await hre.viem.getWalletClients();
