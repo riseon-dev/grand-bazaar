@@ -1,5 +1,4 @@
 import {
-
   loadFixture,
 } from "@nomicfoundation/hardhat-toolbox-viem/network-helpers";
 import { expect } from "chai";
@@ -43,7 +42,6 @@ async function deployContracts () {
     return multiWallet;
   }
 
-
   const stableCoin = await deployStableCoin();
   const multiWallet = await deployMultiWallet(stableCoin.address);
 
@@ -55,7 +53,6 @@ async function deployContracts () {
     multiWallet,
     publicClient,
   }}
-
 
 
 
@@ -86,38 +83,9 @@ describe('MultiWalletAccount', function () {
   });
 
 
+  // describe('Only Operator functions', function () => {
+  //
+  // })
 
-  //   async function deployOneYearLockFixture() {
-  //   const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-  //
-  //   const lockedAmount = parseGwei("1");
-  //   const unlockTime = BigInt((await time.latest()) + ONE_YEAR_IN_SECS);
-  //
-  //   // Contracts are deployed using the first signer/account by default
-  //   const [owner, otherAccount] = await hre.viem.getWalletClients();
-  //
-  //   const lock = await hre.viem.deployContract("Lock", [unlockTime], {
-  //     value: lockedAmount,
-  //   });
-  //
-  //   const publicClient = await hre.viem.getPublicClient();
-  //
-  //   return {
-  //     lock,
-  //     unlockTime,
-  //     lockedAmount,
-  //     owner,
-  //     otherAccount,
-  //     publicClient,
-  //   };
-  // }
-  //
-  // describe("Deployment", function () {
-  //   it("Should set the right unlockTime", async function () {
-  //     const {lock, unlockTime} = await loadFixture(deployOneYearLockFixture);
-  //
-  //     expect(await lock.read.unlockTime()).to.equal(unlockTime);
-  //   });
-  // });
 
 })
