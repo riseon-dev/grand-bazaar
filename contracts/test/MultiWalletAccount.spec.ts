@@ -213,9 +213,10 @@ describe('MultiWalletAccount', function () {
         abi: stableCoin.abi,
         client: user1,
       });
-      // eslint-disable-next-line
-      // @ts-ignore
+
       await expect(
+        // eslint-disable-next-line
+        // @ts-ignore
         stableCoinContract.write.approve([
           multiWallet.address,
           parseEther('5'),
