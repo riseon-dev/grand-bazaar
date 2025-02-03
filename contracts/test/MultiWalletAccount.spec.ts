@@ -181,9 +181,10 @@ describe('MultiWalletAccount', function () {
         abi: multiWallet.abi,
         client: user1,
       });
-      // eslint-disable-next-line
-      // @ts-ignore
+
       await expect(
+        // eslint-disable-next-line
+        // @ts-ignore
         contract.write.withdrawEthBalance(ethAmount),
       ).to.be.rejectedWith('Only operator can call this function');
       const balanceAfterWithdraw = await getBalance(publicClient, {
