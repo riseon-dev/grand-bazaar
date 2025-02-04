@@ -11,7 +11,8 @@ import {
 import {getBalance} from 'viem/actions';
 
 async function deployContracts() {
-  const [deployer, operator, user1] = await hre.viem.getWalletClients();
+  const [deployer, operator, user1, user2, user3] =
+    await hre.viem.getWalletClients();
 
   const publicClient = await hre.viem.getPublicClient();
 
@@ -57,11 +58,21 @@ async function deployContracts() {
     user1.account.address,
     parseEther('20'),
   ]);
+  await stableCoinContract.write.transfer([
+    user2.account.address,
+    parseEther('20'),
+  ]);
+  await stableCoinContract.write.transfer([
+    user3.account.address,
+    parseEther('20'),
+  ]);
 
   return {
     deployer,
     operator,
     user1,
+    user2,
+    user3,
     stableCoin,
     multiWallet,
     publicClient,
@@ -320,6 +331,53 @@ describe('MultiWalletAccount', function () {
       expect(stableCoinMultiWalletBalanceAfter).to.equal(0);
     });
 
-    it('should not allow operator to withdraw balance');
+    it('should not allow user to withdraw more funds than he deposited', async () => {
+      const {multiWallet, stableCoin, user1, user2, user3} =
+        await loadFixture(deployContracts);
+
+      await depositBaseToken(multiWallet, stableCoin, user1);
+      await depositBaseToken(multiWallet, stableCoin, user2);
+      await depositBaseToken(multiWallet, stableCoin, user3);
+
+      const multiWalletContract = getContract({
+        address: multiWallet.address,
+        abi: multiWallet.abi,
+        client: user1,
+      });
+      const stableCoinContract = getContract({
+        address: stableCoin.address,
+        abi: stableCoin.abi,
+        client: user1,
+      });
+
+      // check balances before
+      const balanceBefore = await multiWalletContract.read.checkBalance([
+        user1.account.address,
+        stableCoin.address,
+      ]);
+      const stableCoinUserBalanceBefore =
+        await stableCoinContract.read.balanceOf([user1.account.address]);
+      const stableCoinMultiWalletBalanceBefore =
+        await stableCoinContract.read.balanceOf([multiWallet.address]);
+      expect(balanceBefore).to.equal(parseEther('5'));
+      expect(stableCoinUserBalanceBefore).to.equal(parseEther('15'));
+      expect(stableCoinMultiWalletBalanceBefore).to.equal(parseEther('15'));
+
+      await expect(multiWalletContract.write.withdraw([stableCoin.address])).to
+        .be.fulfilled;
+
+      // check balances after
+      const balanceAfter = await multiWalletContract.read.checkBalance([
+        user1.account.address,
+        stableCoin.address,
+      ]);
+      expect(balanceAfter).to.equal(0);
+      const stableCoinUserBalanceAfter =
+        await stableCoinContract.read.balanceOf([user1.account.address]);
+      const stableCoinMultiWalletBalanceAfter =
+        await stableCoinContract.read.balanceOf([multiWallet.address]);
+      expect(stableCoinUserBalanceAfter).to.equal(parseEther('20'));
+      expect(stableCoinMultiWalletBalanceAfter).to.equal(parseEther('10'));
+    });
   });
 });

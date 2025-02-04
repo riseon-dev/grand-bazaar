@@ -1,7 +1,7 @@
 {
   "name": "contracts",
   "version": "1.0.0",
-  "description": "",
+  "description": "Contracts for AI Trading Vaults",
   "main": "index.js",
   "scripts": {
     "chain": "hardhat node",
@@ -11,10 +11,10 @@
     "test:gas": "REPORT_GAS=true hardhat test",
     "test:cov": "SOLIDITY_COVERAGE=true npx hardhat coverage",
     "deploy": "hardhat ignition deploy ./ignition/modules/Lock.ts",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md,js,jsx,sol}\""
   },
   "keywords": [],
-  "author": "",
+  "author": "Abdulla Faraz <abdulla.faraz@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "2.0.8",
@@ -30,10 +30,13 @@
     "@nomicfoundation/hardhat-toolbox-viem": "3.0.0",
     "@nomicfoundation/hardhat-viem": "2.0.6",
     "@openzeppelin/contracts": "5.2.0",
+    "@uniswap/sdk-core": "7.5.0",
+    "@uniswap/v3-core": "1.0.1",
+    "@uniswap/v3-periphery": "1.4.4",
     "viem": "2.22.17"
   },
   "peerDependencies": {
-    "@types/chai": "5.0.1",
-    "@types/chai-as-promised": "8.0.1"
+    "@types/chai": "4.2.0",
+    "@types/chai-as-promised": "7.1.6"
   }
 }

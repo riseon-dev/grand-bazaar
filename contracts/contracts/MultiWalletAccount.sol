@@ -2,19 +2,7 @@
 pragma solidity ^0.8.28;
 
 import {AbstractMultiWalletAccount} from "./AbstractMultiWalletAccount.sol";
-import {IAccount} from "@account-abstraction/contracts/interfaces/IAccount.sol";
-import {PackedUserOperation} from "@account-abstraction/contracts/interfaces/IAccount.sol";
 
-
-contract MultiWalletAccount is AbstractMultiWalletAccount, IAccount {
+contract MultiWalletAccount is AbstractMultiWalletAccount {
     constructor(address _operator, address _baseToken) AbstractMultiWalletAccount(_operator, _baseToken) {}
-
-    function validateUserOp(
-        PackedUserOperation calldata userOp,
-        bytes32 userOpHash,
-        uint256 missingAccountFunds
-    ) external returns (uint256 validationData) {
-        require(msg.sender == operator, "WA: user not operator");
-        return 0;
-    }
 }
