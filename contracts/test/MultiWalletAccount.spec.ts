@@ -319,7 +319,5 @@ describe('MultiWalletAccount', function () {
       expect(stableCoinUserBalanceAfter).to.equal(parseEther('20'));
       expect(stableCoinMultiWalletBalanceAfter).to.equal(0);
     });
-
-    it('should not allow operator to withdraw balance');
   });
 });
