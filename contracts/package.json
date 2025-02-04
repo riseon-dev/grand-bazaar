@@ -11,7 +11,7 @@
     "test:gas": "REPORT_GAS=true hardhat test",
     "test:cov": "SOLIDITY_COVERAGE=true npx hardhat coverage",
     "deploy": "hardhat ignition deploy ./ignition/modules/Lock.ts",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md,js,jsx,sol}\""
   },
   "keywords": [],
   "author": "Abdulla Faraz <abdulla.faraz@gmail.com>",
