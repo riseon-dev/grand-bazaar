@@ -3,5 +3,17 @@
   "trailingComma": "all",
   "bracketSpacing": false,
   "arrowParens": "avoid",
-  "semi": true
+  "semi": true,
+  "overrides": [
+    {
+      "files": "*.sol",
+      "options": {
+        "printWidth": 200,
+        "tabWidth": 4,
+        "useTabs": false,
+        "singleQuote": false,
+        "bracketSpacing": false
+      }
+    }
+  ]
 }

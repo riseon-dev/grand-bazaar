@@ -30,10 +30,12 @@
     "@nomicfoundation/hardhat-toolbox-viem": "3.0.0",
     "@nomicfoundation/hardhat-viem": "2.0.6",
     "@openzeppelin/contracts": "5.2.0",
+    "@uniswap/sdk-core": "7.5.0",
+    "@uniswap/v3-periphery": "1.4.4",
     "viem": "2.22.17"
   },
   "peerDependencies": {
-    "@types/chai": "5.0.1",
-    "@types/chai-as-promised": "8.0.1"
+    "@types/chai": "4.2.0",
+    "@types/chai-as-promised": "7.1.6"
   }
 }

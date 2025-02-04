@@ -2,7 +2,9 @@
 pragma solidity ^0.8.28;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "./lib/AddressSet.sol";
 import "hardhat/console.sol";
+
 /*
   * AbstractMultiWalletAccount contract
   *
@@ -11,6 +13,7 @@ import "hardhat/console.sol";
   *
 */
 abstract contract AbstractMultiWalletAccount {
+
     /*
       * The operator of the account (the fund manager if it's a fund)
       * Operator should not be able to withdraw funds from account.
@@ -24,18 +27,46 @@ abstract contract AbstractMultiWalletAccount {
     */
     address public baseToken;
 
+    /*
+     * The set of tokens held in this contract
+    */
+    using AddressSet for AddressSet.Set;
+    AddressSet.Set tokenSet;
 
-    // user => token => amount
+    /*
+      * This mapping stores user balances for each token (user => token => amount)
+    */
     mapping(address => mapping(address => uint256)) public wallets;
 
+    /*
+     * This mapping stores total balances for each token
+    */
     mapping(address => uint256) public contractTokenBalances;
+
+
+    /*
+    * this struct is used to pass parameters to swapOnUniswap function
+    */
+    struct SwapOnUniswapParams {
+        address tokenAddressIn;
+        address tokenAddressOut;
+        address swapRouter;
+        uint24 poolFee;
+        uint256 amountIn;
+        uint256 deadline;
+        uint256 amountOutMinimum;
+        uint160 sqrtPriceLimitX96;
+        uint256 estimatedGasFees; // gas fee in base currency
+    }
 
     event DepositEvent(address from, address tokenAddress, uint256 amountReceived);
     event WithdrawEvent(address to, address tokenAddress, uint256 amountSent);
+    event SwapSucceeded(uint256 amountOut, address tokenOut, uint256 amountIn, address tokenIn, uint24 poolFee);
 
     constructor(address _operator, address _baseToken) {
         operator = _operator;
         baseToken = _baseToken;
+        tokenSet.insert(_baseToken);
     }
 
     function deposit(uint256 amount) external {
@@ -79,6 +110,43 @@ abstract contract AbstractMultiWalletAccount {
     function checkBalance(address user, address tokenAddress) public view returns (uint256) {
         return wallets[user][tokenAddress];
     }
+
+    function swapOnUniswap(SwapOnUniswapParams calldata swapParams) external onlyOperator {
+        // TODO check whether contract has balance
+
+        ISwapRouter swapRouter = ISwapRouter(swapParams.swapRouter);
+
+        uint256 amountInAfterFee = swapParams._amountIn - swapParams._estimatedGasFees;
+
+        ISwapRouter.ExactInputSingleParams memory params = ISwapRouter.ExactInputSingleParams({
+            tokenIn: swapParams._tokenAddressIn,
+            tokenOut: swapParams._tokenAddressOut,
+            fee: swapParams._poolFee,
+            recipient: address(this),
+            deadline: block.timestamp + swapParams._deadline,
+            amountIn: amountInAfterFee,
+            amountOutMinimum: swapParams._amountOutMinimum,
+            sqrtPriceLimitX96: swapParams._sqrtPriceLimitX96
+        });
+
+        uint256 amountOut = swapRouter.exactInputSingle(params);
+
+        // TODO update tokens and balances
+//        _afterSwap(swapParams._ruleId, swapParams._tokenAddressIn, swapParams._amountIn, swapParams._tokenAddressOut, amountOut, totalFeeAmount);
+
+        // TODO emit event
+//        emit SwapSucceeded(
+//            "Swap succeeded",
+//            Strings.toString(amountOut),
+//            swapParams._tokenAddressOut,
+//            Strings.toString(swapParams._amountIn),
+//            swapParams._tokenAddressIn,
+//            swapParams._ruleId,
+//            swapParams._orderId,
+//            swapParams._poolFee
+//        );
+    }
+
 
     modifier onlyOperator() {
         require(msg.sender == operator, "Only operator can call this function");
