@@ -2,6 +2,8 @@
 pragma solidity ^0.8.28;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@uniswap/v3-periphery/contracts/libraries/TransferHelper.sol";
+import "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
 import "./lib/AddressSet.sol";
 import "hardhat/console.sol";
 
@@ -31,6 +33,10 @@ abstract contract AbstractMultiWalletAccount {
      */
     using AddressSet for AddressSet.Set;
     AddressSet.Set tokenSet;
+    /*
+     * The set of depositor who have funds in this contract
+     */
+    AddressSet.Set depositorSet;
 
     /*
      * This mapping stores user balances for each token (user => token => amount)
@@ -109,39 +115,61 @@ abstract contract AbstractMultiWalletAccount {
     }
 
     function swapOnUniswap(SwapOnUniswapParams calldata swapParams) external onlyOperator {
-        // TODO check whether contract has balance
+        require(tokenSet.contains(swapParams.tokenAddressIn), "Token not supported");
+        require(contractTokenBalances[swapParams.tokenAddressIn] >= swapParams.amountIn, "Insufficient balance");
 
         ISwapRouter swapRouter = ISwapRouter(swapParams.swapRouter);
 
-        uint256 amountInAfterFee = swapParams._amountIn - swapParams._estimatedGasFees;
+        uint256 amountInAfterFee = swapParams.amountIn - swapParams.estimatedGasFees;
 
         ISwapRouter.ExactInputSingleParams memory params = ISwapRouter.ExactInputSingleParams({
-            tokenIn: swapParams._tokenAddressIn,
-            tokenOut: swapParams._tokenAddressOut,
-            fee: swapParams._poolFee,
+            tokenIn: swapParams.tokenAddressIn,
+            tokenOut: swapParams.tokenAddressOut,
+            fee: swapParams.poolFee,
             recipient: address(this),
-            deadline: block.timestamp + swapParams._deadline,
+            deadline: block.timestamp + swapParams.deadline,
             amountIn: amountInAfterFee,
-            amountOutMinimum: swapParams._amountOutMinimum,
-            sqrtPriceLimitX96: swapParams._sqrtPriceLimitX96
+            amountOutMinimum: swapParams.amountOutMinimum,
+            sqrtPriceLimitX96: swapParams.sqrtPriceLimitX96
         });
 
         uint256 amountOut = swapRouter.exactInputSingle(params);
+        require(amountOut >= swapParams.amountOutMinimum, "Uniswap swap failed");
 
-        // TODO update tokens and balances
-        //        _afterSwap(swapParams._ruleId, swapParams._tokenAddressIn, swapParams._amountIn, swapParams._tokenAddressOut, amountOut, totalFeeAmount);
+        uint depositorCount = depositorSet.size();
+        address[] memory depositors = new address[](depositorCount);
+        depositors = depositorSet.values();
 
-        // TODO emit event
-        //        emit SwapSucceeded(
-        //            "Swap succeeded",
-        //            Strings.toString(amountOut),
-        //            swapParams._tokenAddressOut,
-        //            Strings.toString(swapParams._amountIn),
-        //            swapParams._tokenAddressIn,
-        //            swapParams._ruleId,
-        //            swapParams._orderId,
-        //            swapParams._poolFee
-        //        );
+        uint256 contractTokenBalance = contractTokenBalances[swapParams.tokenAddressIn];
+
+        for (uint i = 0; i < depositorCount; i++) {
+            address depositor = depositors[i];
+            uint256 balance = wallets[depositor][swapParams.tokenAddressIn];
+            if (balance > 0) {
+                // deduct tokenIn from users who have tokenIn
+                uint256 depositorShare = (balance / contractTokenBalance);
+                wallets[depositor][swapParams.tokenAddressIn] -= depositorShare * swapParams.amountIn;
+                // update tokenOut balance for users
+                wallets[depositor][swapParams.tokenAddressOut] += depositorShare * amountOut;
+            }
+        }
+        // update contractTokenBalances
+        contractTokenBalances[swapParams.tokenAddressIn] -= swapParams.amountIn;
+
+        // add tokenOut to tokenSet
+        tokenSet.insert(swapParams.tokenAddressOut);
+
+        // update contractTokenBalances
+        contractTokenBalances[swapParams.tokenAddressOut] += amountOut;
+
+        // emit event
+        emit SwapSucceeded(
+            amountOut,
+            swapParams.tokenAddressOut,
+            swapParams.amountIn,
+            swapParams.tokenAddressIn,
+            swapParams.poolFee
+        );
     }
 
     modifier onlyOperator() {
