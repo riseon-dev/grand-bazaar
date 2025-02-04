@@ -1,7 +1,7 @@
 {
   "name": "grand-bazaar",
   "version": "1.0.0",
-  "description": "",
+  "description": "Monorepo for Grand Bazaar, AI Trading Bot Marketplace",
   "main": "index.js",
   "scripts": {
     "dev": "turbo run dev",
@@ -13,7 +13,7 @@
     "prepare": "husky"
   },
   "keywords": [],
-  "author": "",
+  "author": "Abdulla Faraz <abdulla.faraz@gmail.com>",
   "license": "MIT",
   "engines": {
     "node": "22.11.0"
