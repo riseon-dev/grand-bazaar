@@ -28,6 +28,8 @@ abstract contract AbstractMultiWalletAccount {
     // user => token => amount
     mapping(address => mapping(address => uint256)) public wallets;
 
+    mapping(address => uint256) public contractTokenBalances;
+
     event DepositEvent(address from, address tokenAddress, uint256 amountReceived);
     event WithdrawEvent(address to, address tokenAddress, uint256 amountSent);
 
@@ -50,6 +52,7 @@ abstract contract AbstractMultiWalletAccount {
         require(sent, "Failed to deposit funds");
 
         wallets[depositor][baseToken] += amount;
+        contractTokenBalances[baseToken] += amount;
         emit DepositEvent(msg.sender, baseToken,  amount);
     }
 
@@ -65,6 +68,7 @@ abstract contract AbstractMultiWalletAccount {
         require(sent, "Failed to withdraw funds");
 
         wallets[withdrawer][tokenAddress] = 0;
+        contractTokenBalances[tokenAddress] -= balance;
         emit WithdrawEvent(withdrawer, tokenAddress, balance);
     }
 
