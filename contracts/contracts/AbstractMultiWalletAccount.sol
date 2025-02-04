@@ -5,7 +5,6 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@uniswap/v3-periphery/contracts/libraries/TransferHelper.sol";
 import "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
 import "./lib/AddressSet.sol";
-import "hardhat/console.sol";
 
 /*
  * AbstractMultiWalletAccount contract
