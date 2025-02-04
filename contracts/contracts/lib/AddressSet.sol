@@ -18,7 +18,7 @@ library AddressSet {
 
     function remove(Set storage self, address key) internal {
         require(exists(self, key), "UnorderedKeySet(102) - Address (key) does not exist in the set.");
-        address keyToMove = self.keyList[count(self)-1];
+        address keyToMove = self.keyList[count(self) - 1];
         uint rowToReplace = self.keyPointers[key];
         self.keyPointers[keyToMove] = rowToReplace;
         self.keyList[rowToReplace] = keyToMove;
@@ -26,20 +26,20 @@ library AddressSet {
         self.keyList.pop();
     }
 
-    function count(Set storage self) internal view returns(uint) {
-        return(self.keyList.length);
+    function count(Set storage self) internal view returns (uint) {
+        return (self.keyList.length);
     }
 
-    function exists(Set storage self, address key) internal view returns(bool) {
-        if(self.keyList.length == 0) return false;
+    function exists(Set storage self, address key) internal view returns (bool) {
+        if (self.keyList.length == 0) return false;
         return self.keyList[self.keyPointers[key]] == key;
     }
 
-    function keyAtIndex(Set storage self, uint index) internal view returns(address) {
+    function keyAtIndex(Set storage self, uint index) internal view returns (address) {
         return self.keyList[index];
     }
 
-    function getSet(Set storage self) internal view returns(address[] memory) {
+    function getSet(Set storage self) internal view returns (address[] memory) {
         return self.keyList;
     }
 }
