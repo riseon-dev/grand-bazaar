@@ -1,10 +1,17 @@
-import './App.css';
+import {ConnectKitButton} from 'connectkit';
 
 function App() {
   return (
-    <>
-      <div></div>
-    </>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+      }}
+    >
+      <ConnectKitButton />
+    </div>
   );
 }
 
