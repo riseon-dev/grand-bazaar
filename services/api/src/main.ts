@@ -16,6 +16,7 @@ async function bootstrap() {
 
   app.enableShutdownHooks();
   await app.register(fastifyCookie);
+  app.enableCors();
   await app.listen(
     configService.getOrThrow<string>('SERVICE_API_PORT'),
     '0.0.0.0',
