@@ -4,10 +4,15 @@ export interface verifySignatureRequest {
   nonce: string;
 }
 
+export interface generateAccessTokenResponse {
+  token: string;
+  refresh: string;
+}
+
 export interface SigninService {
-  generateNonce(): Promise<string>;
+  generateNonce(): string;
   verifySignature(verifyRequest: verifySignatureRequest): Promise<boolean>;
-  generateAccessToken(userEthAddress: string): Promise<string>;
+  generateAccessToken(userEthAddress: string): generateAccessTokenResponse;
 }
 
 export const SigninService = Symbol('SigninService');

@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 
 @Controller('user')
-export class ClientController {
+export class UserController {
   constructor() {} //private readonly clientService: ClientService
 
   // @Get('/profile')

@@ -1,25 +1,28 @@
 import {
   // Body,
   Controller,
-  // Get,
+  Get,
+  Logger,
   // Post,
   // Req,
   // Res,
   // UseGuards,
 } from '@nestjs/common';
+import { SigninService } from '../../domain/services/signin.service';
 
 @Controller('auth')
-export class ClientController {
-  constructor() {} //  private readonly clientService: ClientService
+export class AuthController {
+  private logger: Logger = new Logger(AuthController.name);
 
-  // @Get("nonce")
-  // //get nonce req and response decorators
-  // async getNonce(@Req() req: Request, @Res() res: Response) {
-  //   const nonce = await this.ethereumService.getNonce();
-  //   console.log(nonce);
-  //
-  //   return res.status(200).json({ nonce });
-  // }
+  constructor(private readonly signinService: SigninService) {}
+
+  @Get('nonce')
+  async getNonce() {
+    this.logger.log('generating nonce...');
+    const nonce = this.signinService.generateNonce();
+    this.logger.log(`nonce: ${nonce}`);
+    return { nonce };
+  }
 
   //
   // @UseGuards(SiweAuthGuard)
