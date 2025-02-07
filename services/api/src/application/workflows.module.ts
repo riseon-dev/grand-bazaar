@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
+import { SqliteModule } from '../infra/adapters/database/sqlite/sqlite.module';
 
 @Module({
-  imports: [],
+  imports: [SqliteModule],
   providers: [],
   exports: [],
 })
