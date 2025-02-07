@@ -26,7 +26,7 @@ export default [
   pluginReact.configs.flat.recommended,
   pluginJest.configs["flat/style"],
   {
-    files: ['**/*.{ts,tsx}'],
+    files: ['**/*.{tsx,jsx}'],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
