@@ -1,13 +1,9 @@
-import {createFileRoute} from '@tanstack/react-router';
+import {createRoute} from '@tanstack/react-router';
+import {rootRoute} from './__root.tsx';
 
-export const Route = createFileRoute('/')({
-  component: RouteComponent,
+// Define child routes
+export const indexRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/',
+  component: () => <div>Home Page</div>,
 });
-
-function RouteComponent() {
-  return (
-    <div>
-      <h1>WOW</h1>
-    </div>
-  );
-}

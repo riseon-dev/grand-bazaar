@@ -1,14 +1,17 @@
-import {createLazyFileRoute, LazyRoute} from '@tanstack/react-router';
+import {createRootRoute, Link, Outlet} from '@tanstack/react-router';
+import {TanStackRouterDevtools} from '@tanstack/router-devtools';
 
-// eslint-disable-next-line
-export const Route: LazyRoute<any> = createLazyFileRoute('/')({
-  component: Index,
+// Define the root route with a shared layout
+
+export const rootRoute = createRootRoute({
+  component: () => (
+    <>
+      <nav>
+        <Link to="/">Home</Link>
+        <Link to="/about">About</Link>
+      </nav>
+      <Outlet />
+      <TanStackRouterDevtools />
+    </>
+  ),
 });
-
-function Index() {
-  return (
-    <div className="p-2">
-      <h3>Welcome Home!</h3>
-    </div>
-  );
-}

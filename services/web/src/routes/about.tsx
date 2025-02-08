@@ -1,9 +1,8 @@
-import {createFileRoute} from '@tanstack/react-router';
+import {createRoute} from '@tanstack/react-router';
+import {rootRoute} from './__root.tsx';
 
-export const Route = createFileRoute('/about')({
-  component: About,
+export const aboutRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/about',
+  component: () => <div>About Us</div>,
 });
-
-function About() {
-  return <div className="p-2">Hello from About!</div>;
-}

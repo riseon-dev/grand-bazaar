@@ -2,24 +2,29 @@ import './polyfills';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import {Web3Provider} from './components/web3-provider.tsx';
-import {ThemeProvider} from './context/theme-context.tsx';
-import {FontProvider} from './context/font-context.tsx';
-import {router} from './components/web3-provider.tsx';
-import {RouterProvider} from '@tanstack/react-router';
+import {createRouter, RouterProvider} from '@tanstack/react-router';
+import {indexRoute} from './routes';
+import {aboutRoute} from './routes/about.tsx';
+import {rootRoute} from './routes/__root.tsx';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 
+// Build the route tree
+const routeTree = rootRoute.addChildren([indexRoute, aboutRoute]);
+
+// Create the router instance
+const router = createRouter({routeTree});
+
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router;
+  }
+}
+
 root.render(
   <React.StrictMode>
-    <Web3Provider>
-      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-        <FontProvider>
-          <RouterProvider router={router} />
-        </FontProvider>
-      </ThemeProvider>
-    </Web3Provider>
+    <RouterProvider router={router} />
   </React.StrictMode>,
 );
