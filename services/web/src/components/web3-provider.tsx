@@ -2,6 +2,7 @@ import {WagmiProvider, createConfig, http} from 'wagmi';
 import {arbitrum, mainnet} from 'wagmi/chains';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {ConnectKitProvider, getDefaultConfig} from 'connectkit';
+import React from 'react';
 
 const config = createConfig(
   getDefaultConfig({
@@ -33,8 +34,7 @@ const config = createConfig(
 
 const queryClient = new QueryClient();
 
-// eslint-disable-next-line
-export const Web3Provider = ({children}: {children: any}) => {
+export const Web3Provider = ({children}: {children: React.ReactNode}) => {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
