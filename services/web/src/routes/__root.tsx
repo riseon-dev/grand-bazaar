@@ -1,8 +1,8 @@
 import {createRootRoute, Outlet} from '@tanstack/react-router';
-import {TanStackRouterDevtools} from '@tanstack/router-devtools';
 import {Box, Container, Grid, Separator} from '@radix-ui/themes';
 import Header from '../design-system/templates/header.tsx';
 import Footer from '../design-system/templates/footer.tsx';
+// import {TanStackRouterDevtools} from '@tanstack/router-devtools';
 
 // Define the root route with a shared layout
 
@@ -56,7 +56,7 @@ export const rootRoute = createRootRoute({
           <Box width="148px" height="120px" />
         </Container>
       </Grid>
-      <TanStackRouterDevtools />
+      {/*<TanStackRouterDevtools />*/}
     </>
   ),
 });
