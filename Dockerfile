@@ -1,35 +1,31 @@
-FROM node:22.11-bookworm-slim AS builder
+FROM node:22.11-bookworm-slim AS base
 
-# Copy source
-COPY . /app
-
-# Create app directory
-WORKDIR /app
-
-# Setup PNPM
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-
-# Install
 RUN npm install -g corepack@latest pnpm@latest
 RUN corepack enable
+
+
+FROM base AS build
+COPY . /app
+WORKDIR /app
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
-# Build
-RUN pnpm build
+RUN pnpm run -r build
 
-# Deploy apps
-RUN pnpm deploy --filter=api --prod /prod/api
-RUN pnpm deploy --filter=web --prod /prod/web
+RUN pnpm deploy --filter=api --prod /prod/api && \
+     cp -r "$(pnpm --filter=api list --depth=-1 --parseable)/dist" /prod/api/dist
+RUN pnpm deploy --filter=web --prod /prod/web && \
+     cp -r "$(pnpm --filter=web list --depth=-1 --parseable)/dist" /prod/web
 
-
-FROM builder AS api
-COPY --from=builder /prod/api /prod/api
+FROM base AS api
+COPY --from=build /prod/api /prod/api
 WORKDIR /prod/api
+RUN ls -la
 EXPOSE 5000
 CMD [ "pnpm", "start:prod" ]
 
-FROM nginx:stable AS web
-COPY --from=builder /prod/web /usr/share/nginx/html
+FROM base AS web
+COPY --from=build /prod/web /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
