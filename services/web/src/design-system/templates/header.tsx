@@ -1,6 +1,7 @@
 // import React from 'react';
 import {Link} from '@tanstack/react-router';
 import {Box, Button, Flex} from '@radix-ui/themes';
+import {RocketIcon} from '@radix-ui/react-icons';
 
 const Header = () => {
   return (
@@ -13,7 +14,10 @@ const Header = () => {
           <Link to="/about">About</Link>
         </Box>
         <Box>
-          <a href="#">Deploy your own AI bot</a>
+          <span>
+            <RocketIcon style={{display: 'inline-block'}} />
+            <a href="#"> Deploy your own AI bot</a>
+          </span>
         </Box>
         <Box>
           <Button variant="solid" size={'3'}>
