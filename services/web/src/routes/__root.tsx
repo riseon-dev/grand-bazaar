@@ -1,6 +1,8 @@
-import {createRootRoute, Link, Outlet} from '@tanstack/react-router';
+import {createRootRoute, Outlet} from '@tanstack/react-router';
 import {TanStackRouterDevtools} from '@tanstack/router-devtools';
 import {Box, Container, Grid} from '@radix-ui/themes';
+import Header from '../design-system/templates/header.tsx';
+import Footer from '../design-system/templates/footer.tsx';
 
 // Define the root route with a shared layout
 
@@ -13,10 +15,7 @@ export const rootRoute = createRootRoute({
           <Box width="148px" height="120px" />
         </Container>
         <Container size={'4'}>
-          <nav>
-            <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
-          </nav>
+          <Header />
         </Container>
         <Container>
           <Box width="148px" height="120px" />
@@ -40,7 +39,7 @@ export const rootRoute = createRootRoute({
           <Box width="148px" height="120px" />
         </Container>
         <Container size={'4'}>
-          <Box>Footer</Box>
+          <Footer />
         </Container>
         <Container>
           <Box width="148px" height="120px" />
