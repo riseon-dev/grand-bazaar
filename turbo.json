@@ -21,6 +21,7 @@
     "deploy": {
       "dependsOn": ["compile"]
     },
+    "preview": {},
     "format": {},
     "lint": {},
     "test": {},
