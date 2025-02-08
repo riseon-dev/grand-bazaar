@@ -50,6 +50,7 @@ spec:
   ipFamilies:
     - IPv4
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: 8888
       targetPort: 5000
