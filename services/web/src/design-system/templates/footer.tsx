@@ -16,7 +16,7 @@ const Footer = () => {
             width={'200px'}
             style={{display: 'inline-block'}}
           />
-          Copyright (c) 2025
+          Copyright (c) 2025, Riseon
         </Text>
       </Box>
     </>
