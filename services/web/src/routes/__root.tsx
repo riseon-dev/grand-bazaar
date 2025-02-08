@@ -1,6 +1,6 @@
 import {createRootRoute, Outlet} from '@tanstack/react-router';
 import {TanStackRouterDevtools} from '@tanstack/router-devtools';
-import {Box, Container, Grid} from '@radix-ui/themes';
+import {Box, Container, Grid, Separator} from '@radix-ui/themes';
 import Header from '../design-system/templates/header.tsx';
 import Footer from '../design-system/templates/footer.tsx';
 
@@ -14,7 +14,10 @@ export const rootRoute = createRootRoute({
         <Container>
           <Box width="148px" height="120px" />
         </Container>
-        <Container size={'4'}>
+        <Container
+          size={'4'}
+          style={{justifyContent: 'center', alignItems: 'center'}}
+        >
           <Header />
         </Container>
         <Container>
@@ -25,7 +28,10 @@ export const rootRoute = createRootRoute({
         <Container>
           <Box width="148px" height="120px" />
         </Container>
-        <Container size={'4'}>
+        <Container
+          size={'4'}
+          style={{justifyContent: 'center', alignItems: 'center'}}
+        >
           <Box>
             <Outlet />
           </Box>
@@ -38,7 +44,12 @@ export const rootRoute = createRootRoute({
         <Container>
           <Box width="148px" height="120px" />
         </Container>
-        <Container size={'4'}>
+        <Container
+          size={'4'}
+          style={{justifyContent: 'center', alignItems: 'center'}}
+        >
+          <Separator my="8" size="4" />
+
           <Footer />
         </Container>
         <Container>

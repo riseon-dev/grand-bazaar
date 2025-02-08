@@ -26,7 +26,12 @@ declare module '@tanstack/react-router' {
 
 root.render(
   <React.StrictMode>
-    <Theme accentColor="crimson" grayColor="sand" radius="large">
+    <Theme
+      accentColor="jade"
+      grayColor="sage"
+      panelBackground="solid"
+      radius="large"
+    >
       <RouterProvider router={router} />
     </Theme>
   </React.StrictMode>,

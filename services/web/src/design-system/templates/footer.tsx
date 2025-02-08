@@ -1,11 +1,15 @@
 // import React from 'react';
 
-import {Box} from '@radix-ui/themes';
+import {Box, Text} from '@radix-ui/themes';
 
 const Footer = () => {
   return (
     <>
-      <Box>Footer</Box>
+      <Box>
+        <Text align="center" as="p" size="2" color="gray">
+          Copyright (c) 2025
+        </Text>
+      </Box>
     </>
   );
 };
