@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import {createRouter, RouterProvider} from '@tanstack/react-router';
+import {Theme} from '@radix-ui/themes';
 import {indexRoute} from './routes';
 import {aboutRoute} from './routes/about.tsx';
 import {rootRoute} from './routes/__root.tsx';
@@ -25,6 +26,8 @@ declare module '@tanstack/react-router' {
 
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Theme accentColor="crimson" grayColor="sand" radius="large">
+      <RouterProvider router={router} />
+    </Theme>
   </React.StrictMode>,
 );
