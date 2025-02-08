@@ -29,7 +29,7 @@ WORKDIR /prod/api
 EXPOSE 5000
 CMD [ "pnpm", "start:prod" ]
 
-FROM nginx:stable AS web
+FROM nginx:1.27.4 AS web
 COPY --from=builder /prod/web /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
