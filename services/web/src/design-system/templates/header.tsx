@@ -1,6 +1,6 @@
 // import React from 'react';
 import {Link} from '@tanstack/react-router';
-import {Box, Flex} from '@radix-ui/themes';
+import {Box, Button, Flex} from '@radix-ui/themes';
 
 const Header = () => {
   return (
@@ -16,7 +16,9 @@ const Header = () => {
           <a href="#">Deploy your own AI bot</a>
         </Box>
         <Box>
-          <a href="#">Connect Wallet</a>
+          <Button variant="solid" size={'3'}>
+            Connect Wallet
+          </Button>
         </Box>
       </Flex>
     </>
