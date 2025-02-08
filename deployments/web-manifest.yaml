@@ -24,6 +24,32 @@ spec:
             limits:
               cpu: 500m
               memory: 500Mi
+          env:
+            - name: VITE_REOWN_WALLET_PROJECT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: deploy-config
+                  key: VITE_REOWN_WALLET_PROJECT_ID
+            - name: VITE_ALCHEMY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: deploy-config
+                  key: VITE_ALCHEMY_ID
+            - name: VITE_SERVICE_WEB_PUBLIC_URL
+              valueFrom:
+                secretKeyRef:
+                  name: deploy-config
+                  key: VITE_SERVICE_WEB_PUBLIC_URL
+            - name: WEB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: deploy-config
+                  key: WEB_PORT
+            - name: SERVICE_WEB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: deploy-config
+                  key: SERVICE_WEB_PORT
       restartPolicy: Always
 ---
 apiVersion: v1
