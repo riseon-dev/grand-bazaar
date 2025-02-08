@@ -7,6 +7,7 @@ import {Theme} from '@radix-ui/themes';
 import {indexRoute} from './routes';
 import {aboutRoute} from './routes/about.tsx';
 import {rootRoute} from './routes/__root.tsx';
+import {Web3Provider} from './components/web3-provider.tsx';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -32,7 +33,9 @@ root.render(
       panelBackground="solid"
       radius="large"
     >
-      <RouterProvider router={router} />
+      <Web3Provider>
+        <RouterProvider router={router} />
+      </Web3Provider>
     </Theme>
   </React.StrictMode>,
 );
