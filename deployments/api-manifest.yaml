@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+  labels:
+    app: api-deployment
+spec:
+  selector:
+    matchLabels:
+      app: api-app
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: api-app
+    spec:
+      containers:
+        - name: api
+          image: n3m6/api:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: 500m
+              memory: 500Mi
+          env:
+            - name: SERVICE_API_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: deploy-config
+                  key: SERVICE_API_PORT
+            - name: SERVICE_API_JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: deploy-config
+                  key: SERVICE_API_JWT_SECRET_KEY
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-service
+  labels:
+    app: api-service
+spec:
+  selector:
+    app: api-app
+  type: LoadBalancer
+  ipFamilies:
+    - IPv4
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
