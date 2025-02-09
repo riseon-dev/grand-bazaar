@@ -9,9 +9,67 @@ import {
   Button,
 } from '@radix-ui/themes';
 import {RocketIcon} from '@radix-ui/react-icons';
-import {useDeploy} from '../../hooks/use-deploy.ts';
+import {useAccount, useConnect, useWalletClient} from 'wagmi';
+import {http, createConfig} from 'wagmi';
+import {arbitrum} from 'wagmi/chains';
+import {useEffect, useState} from 'react';
+import {injected} from 'wagmi/connectors';
+
+const config = createConfig({
+  chains: [arbitrum],
+  transports: {
+    [arbitrum.id]: http(),
+  },
+});
 
 const Deploy = () => {
+  const [active, setActive] = useState(false);
+  const [accountAddress, setAccountAddress] = useState<string | undefined>();
+  // eslint-disable-next-line
+  const [walletClient, setWalletClient] = useState<any | undefined>();
+
+  const {connect} = useConnect();
+  const {address: account, isConnected, connector} = useAccount();
+  const {data: client} = useWalletClient({
+    config,
+    connector: connector,
+  });
+
+  useEffect(() => {
+    if (client) {
+      setWalletClient(client);
+    }
+  }, [client]);
+
+  useEffect(() => {
+    if (!active && isConnected) {
+      setActive(true);
+    } else {
+      setActive(false);
+      connect({connector: connector || injected()});
+      setAccountAddress(account);
+    }
+  }, [account, isConnected]);
+
+  // const [hash, setHash] = useState<undefined | `0x${string}`>();
+  // const {
+  //   data: deployTx,
+  //   isError,
+  //   isLoading,
+  // } = useTransaction({
+  //   hash,
+  // })
+
+  const useDeployTheAIAgentWallet = async () => {
+    console.log('>>> 3');
+    // const usdtTokenAddress = '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9';
+
+    console.log('>>> 4');
+    console.log('operatorAddress', accountAddress);
+    alert(`Deploying contract from account: ${accountAddress}`);
+    console.log('wallet client', walletClient);
+  };
+
   return (
     <Flex align={'center'} justify={'center'}>
       <Box maxWidth="480px">
@@ -50,7 +108,7 @@ const Deploy = () => {
               style={{verticalAlign: 'center', textAlign: 'center'}}
             >
               <br />
-              <Button size={'4'} onClick={useDeploy}>
+              <Button size={'4'} onClick={useDeployTheAIAgentWallet}>
                 <RocketIcon style={{display: 'inline-block'}} />
                 Deploy Your AI Agent
               </Button>
