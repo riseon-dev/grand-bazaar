@@ -23,7 +23,7 @@ const Header = () => {
         <Box>
           <span>
             <RocketIcon style={{display: 'inline-block'}} />
-            <a href="#"> Deploy your own AI bot</a>
+            <Link to="/deploy">Deploy your own AI bot</Link>
           </span>
         </Box>
         <Box>
