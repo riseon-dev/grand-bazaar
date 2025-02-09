@@ -37,12 +37,12 @@ const Deploy = () => {
 
               <Text as="p" size="3">
                 If you have an AI agent that you want to deploy, and make
-                available for others to use, you can do so here.
+                available for others to invest in, you can do so here.
               </Text>
 
               <Text as="p" size="3">
-                Click the below button and approve the transaction for the agent
-                to deploy.
+                Click the below button and approve the transaction for the
+                trading contract to deploy.
               </Text>
             </Box>
             <Box
