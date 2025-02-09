@@ -22,8 +22,8 @@ const Header = () => {
         </Box>
         <Box>
           <span>
-            <RocketIcon style={{display: 'inline-block'}} />
-            <a href="#"> Deploy your own AI bot</a>
+            <RocketIcon style={{display: 'inline-block'}} />{' '}
+            <Link to="/deploy">Deploy your own AI agent</Link>
           </span>
         </Box>
         <Box>

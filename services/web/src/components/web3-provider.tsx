@@ -1,5 +1,5 @@
 import {WagmiProvider, createConfig, http} from 'wagmi';
-import {arbitrum, mainnet} from 'wagmi/chains';
+import {arbitrum} from 'wagmi/chains';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {ConnectKitProvider, getDefaultConfig} from 'connectkit';
 import React from 'react';
@@ -7,12 +7,9 @@ import React from 'react';
 const config = createConfig(
   getDefaultConfig({
     // Your dApps chains
-    chains: [mainnet, arbitrum],
+    chains: [arbitrum],
     transports: {
       // RPC URL for each chain
-      [mainnet.id]: http(
-        `https://eth-mainnet.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_ID}`,
-      ),
       [arbitrum.id]: http(
         `https://arb-mainnet.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_ID}`,
       ),

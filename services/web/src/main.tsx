@@ -8,13 +8,14 @@ import {indexRoute} from './routes';
 import {aboutRoute} from './routes/about.tsx';
 import {rootRoute} from './routes/__root.tsx';
 import {Web3Provider} from './components/web3-provider.tsx';
+import {deployRoute} from './routes/deploy.tsx';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 
 // Build the route tree
-const routeTree = rootRoute.addChildren([indexRoute, aboutRoute]);
+const routeTree = rootRoute.addChildren([indexRoute, aboutRoute, deployRoute]);
 
 // Create the router instance
 const router = createRouter({routeTree});

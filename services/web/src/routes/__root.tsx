@@ -33,7 +33,11 @@ export const rootRoute = createRootRoute({
           style={{justifyContent: 'center', alignItems: 'center'}}
         >
           <Box>
+            {/* Outlet for nested routes */}
+
             <Outlet />
+
+            {/* -------------------------------- */}
           </Box>
         </Container>
         <Container>
