@@ -16,7 +16,8 @@ RUN pnpm run -r build
 RUN pnpm deploy --filter=api --prod /prod/api && \
      cp -r "$(pnpm --filter=api list --depth=-1 --parseable)/dist" /prod/api/dist
 RUN pnpm deploy --filter=web --prod /prod/web && \
-     cp -r "$(pnpm --filter=web list --depth=-1 --parseable)/dist" /prod/web
+  cp -r "$(pnpm --filter=web list --depth=-1 --parseable)/dist" /prod/web && \
+  cp -r "$(pnpm --filter=web list --depth=-1 --parseable)/nginx.conf" /prod/web/nginx.conf
 
 FROM base AS api
 COPY --from=build /prod/api /prod/api
@@ -25,7 +26,7 @@ RUN ls -la
 EXPOSE 5000
 CMD [ "pnpm", "start:prod" ]
 
-FROM base AS web
+FROM nginx:alpine AS web
 COPY --from=build /prod/web /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
